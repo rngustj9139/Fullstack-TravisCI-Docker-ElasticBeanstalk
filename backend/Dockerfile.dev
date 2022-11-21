@@ -1,0 +1,14 @@
+FROM node:alpine
+
+WORKDIR /app
+
+COPY ./package.json ./
+
+RUN npm install
+
+COPY . .
+
+# "start": "node server.js",
+# "dev": "nodemon server.js"
+# npm run start를 통해 서버를 실행시키는 것이 아닌 npm run dev를 통해 nodemon으로 서버를 실행시킴 (nodemon은 스프링의 devtools 같은 역할) 
+CMD ["npm", "run", "dev"] 

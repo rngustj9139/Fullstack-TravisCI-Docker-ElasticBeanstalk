@@ -2,7 +2,7 @@ FROM node:alpine as builder
 
 WORKDIR /app
 
-COPY package.json ./
+COPY ./package.json ./
 
 RUN npm install
 
@@ -20,4 +20,4 @@ EXPOSE 3000
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # 빌드된 파일을 컨테이너 속의 파일 위치로 COPY
-COPY /app/build /usr/share/nginx/html 
+COPY --from=builder /app/build /usr/share/nginx/html 
