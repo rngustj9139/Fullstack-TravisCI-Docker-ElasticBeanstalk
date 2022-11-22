@@ -1,0 +1,39 @@
+version: "3"
+services:
+  frontend:
+    build: # 개발환경을 위한 Dockerfile이 어디에 위치해있는지 명시해줌
+      dockerfile: Dockerfile.dev
+      context: ./frontend
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    stdin_open: true # 리엑트 앱을 종료할때 생기는 버그를 잡아줌
+  backend:
+    container_name: app_backend
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./backend
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+  mysql:
+    container_name: app_mysql
+    build:
+      dockerfile: Dockerfile
+      context: ./mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped # 재시작 정책(개발자가 의도해서 mysql을 종료하지 않았을 경우 mysql이 다운되면 항상 재시작 수행)
+    environment:
+      MYSQL_ROOT_PASSWORD: johnahn
+      MYSQL_DATABASE: myapp
+    volumes:
+      - ./mysql/mysql_data:/var/lib/mysql
+      - ./mysql/sqls:/docker-entrypoint-initdb.d/
+  nginx:
+    restart: always # 재시작 정책(웹서버가 꺼질때 언제나 재시작 수행)
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+      - "3000:80" # nginx는 원래 80번 포트를 이용
