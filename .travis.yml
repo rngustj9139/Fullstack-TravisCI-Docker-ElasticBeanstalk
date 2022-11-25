@@ -1,0 +1,25 @@
+language: generic
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t mnb9139/part6app -f ./frontend/Dockerfile.dev ./frontend
+
+script:
+  - docker run -e CI=true mnb9139/part6app npm run test
+
+after_success:
+  - docker build -t mnb9139/part6app-frontend ./frontend
+  - docker build -t mnb9139/part6app-backend ./backend
+  - docker build -t mnb9139/part6app-nginx ./nginx
+
+  # 도커 허브에 로그인 아이디 비밀번호는 travisCI 페이지에서 설정
+  - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin 
+
+  # 도커 허브에 빌드한 운영 이미지 올리기
+  - docker build -t mnb9139/part6app-frontend ./frontend
+  - docker build -t mnb9139/part6app-backend ./backend
+  - docker build -t mnb9139/part6app-nginx ./nginx

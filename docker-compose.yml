@@ -20,20 +20,20 @@ services:
       - /app/node_modules
       - ./backend:/app
 
-  mysql:
-    container_name: app_mysql
-    build:
-      dockerfile: Dockerfile
-      context: ./mysql
-    ports:
-      - "3366:3306"
-    restart: unless-stopped # 재시작 정책(개발자가 의도해서 mysql을 종료하지 않았을 경우 mysql이 다운되면 항상 재시작 수행)
-    environment:
-      MYSQL_ROOT_PASSWORD: johnahn
-      MYSQL_DATABASE: myapp
-    volumes: # 데이터베이스의 저장된 자료를 컨테이너를 지우더라도 지워지지 않을 수 있게 볼륨 설정(도커 컨테이너 속 db에 저장된 데이터를 호스트 파일시스템도 가지고 있는다)
-      - ./mysql/mysql_data:/var/lib/mysql # : 뒤에가 컨테이너의 환경이고 : 앞이 로컬 환경임 (뒤에서 앞으로 참조한다)
-      - ./mysql/sqls:/docker-entrypoint-initdb.d/
+  # mysql:
+  #   container_name: app_mysql
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./mysql
+  #   ports:
+  #     - "3366:3306"
+  #   restart: unless-stopped # 재시작 정책(개발자가 의도해서 mysql을 종료하지 않았을 경우 mysql이 다운되면 항상 재시작 수행)
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: johnahn
+  #     MYSQL_DATABASE: myapp
+  #   volumes: # 데이터베이스의 저장된 자료를 컨테이너를 지우더라도 지워지지 않을 수 있게 볼륨 설정(도커 컨테이너 속 db에 저장된 데이터를 호스트 파일시스템도 가지고 있는다)
+  #     - ./mysql/mysql_data:/var/lib/mysql # : 뒤에가 컨테이너의 환경이고 : 앞이 로컬 환경임 (뒤에서 앞으로 참조한다)
+  #     - ./mysql/sqls:/docker-entrypoint-initdb.d/
 
   nginx:
     restart: always # 재시작 정책(웹서버가 꺼질때 언제나 재시작 수행)
