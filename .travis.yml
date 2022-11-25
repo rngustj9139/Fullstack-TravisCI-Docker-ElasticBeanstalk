@@ -20,6 +20,6 @@ after_success:
   - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_ID" --password-stdin 
 
   # 도커 허브에 빌드한 운영 이미지 올리기
-  - docker push -t mnb9139/part6app-frontend ./frontend
-  - docker push -t mnb9139/part6app-backend ./backend
-  - docker push -t mnb9139/part6app-nginx ./nginx
+  - docker push mnb9139/part6app-frontend ./frontend
+  - docker push mnb9139/part6app-backend ./backend
+  - docker push mnb9139/part6app-nginx ./nginx
